@@ -1,11 +1,11 @@
+import UserService from '../services/userServices';
+
+const { generateToken } = UserService;
 
 const signup = async (req, res) => {
-  //   const user = await save(req);
-  const user = {};
+  const token = await generateToken(req.user);
 
-  user.message = 'Logged in successful';
-
-  res.header('x-auth-token', 'token').json({ status: 201, message: 'success', data: user });
+  res.status(200).json({ status: res.statusCode, message: 'Logged in successfully', data: token });
 };
 
 export default signup;

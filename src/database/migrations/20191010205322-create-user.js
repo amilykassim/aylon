@@ -12,6 +12,9 @@ export default {
     password: {
       type: Sequelize.STRING,
     },
+    is_admin: {
+      type: Sequelize.BOOLEAN,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

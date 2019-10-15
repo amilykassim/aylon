@@ -1,7 +1,13 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-param-reassign */
 import Joi from '@hapi/joi';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import voca from 'voca';
+import dotenv from 'dotenv';
 import database from '../database/models';
+
+dotenv.config();
 
 class UserService {
   static validateSignup(req) {
@@ -10,6 +16,10 @@ class UserService {
       password: Joi.string().required().min(6).max(255),
       is_admin: Joi.boolean(),
     };
+
+    req.body.username = voca.trim(req.body.username);
+    req.body.password = voca.trim(req.body.password);
+
     return Joi.validate(req.body, schema);
   }
 
@@ -24,10 +34,7 @@ class UserService {
   static async generateToken(user) {
     return jwt.sign({
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      is_admin: user.is_admin,
+      username: user.username,
     }, process.env.JWT_PRIVATE_KEY);
   }
 
@@ -37,7 +44,19 @@ class UserService {
   }
 
   static async save(user) {
-    return database.User.create(user);
+    const hashedPassword = await UserService.hashPassword(user);
+    user.password = hashedPassword;
+
+    const { dataValues } = await database.User.create(user);
+    const { password, is_admin, ...newUser } = dataValues;
+
+    return newUser;
+  }
+
+  static async findUserByEmail(username) {
+    const user = await database.User.findOne({ where: { username } });
+    if (!user) return null;
+    return user.dataValues;
   }
 }
 

@@ -1,13 +1,16 @@
 import UserService from '../services/userServices';
 
-const { save } = UserService;
+const { save, findUserByEmail, generateToken } = UserService;
 
 const signup = async (req, res) => {
-  const user = await save(req.body);
+  let user = await findUserByEmail(req.body.username);
+  if (user) return res.status(400).json({ status: res.statusCode, error: 'That username is taken' });
 
-  user.message = 'Signed up successfully';
+  user = await save(req.body);
 
-  res.header('x-auth-token', 'token').json({ status: 201, message: 'success', data: user });
+  user.token = await generateToken(user);
+
+  res.status(201).json({ status: res.statusCode, message: 'Signed up successfully', data: user });
 };
 
 export default signup;
