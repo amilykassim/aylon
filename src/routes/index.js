@@ -1,14 +1,17 @@
 import express from 'express';
-import signup from './signup';
-import signin from './signin';
-// import property from '../routes/property';
+import authRoutes from './authRoutes';
+import productRoutes from './productRoutes';
+import userRoutes from './userRoutes';
 // import error from '../middleware/user/error';
 
-export default (app) => {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use('/api/v1/auth/signup', signup);
-  app.use('/api/v1/auth/signin', signin);
-  app.use('*', (req, res) => { res.status(400).json({ error: 'the route is invalid' }); });
+const router = express.Router();
+
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use('/api/v1/auth', authRoutes);
+router.use('/api/v1/users', userRoutes);
+router.use('/api/v1/products', productRoutes);
+router.use('*', (req, res) => { res.status(400).json({ error: 'the route is invalid' }); });
 //   app.use(error);
-};
+
+export default router;
