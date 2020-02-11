@@ -1,27 +1,40 @@
 /* eslint-disable no-restricted-globals */
 import validator from 'validator';
-import UserValidation from '../validations/userValidation';
+import Joi from '@hapi/joi';
+import voca from 'voca';
 import ProductValidation from '../validations/productValidation';
-import Response from '../helpers/response';
+import Helper from '../helpers/helper';
 
-const { validationError } = Response;
 
-const { validateLoginService, validateSignupService } = UserValidation;
+const { validationError, trimSpaces } = Helper;
+
 const { validateProductService } = ProductValidation;
 
 class Validations {
-  static async validateSignUp(req, res, next) {
-    const { error } = validateSignupService(req);
-    if (error) return validationError(res, error.details[0].message);
+  static async validateSignUp(args) {
+    const schema = {
+      username: Joi.string().required().min(3).max(255),
+      password: Joi.string().required().min(6).max(255),
+      is_admin: Joi.boolean(),
+    };
 
-    next();
+    const data = {};
+    data.username = trimSpaces(args.username);
+    data.password = voca.trim(args.password);
+
+    return Validations.validate(data, schema);
   }
 
-  static async validateLogin(req, res, next) {
-    const { error } = validateLoginService(req);
-    if (error) return validationError(res, error.details[0].message);
-
-    next();
+  static validate(data, schema) {
+    const res = {};
+    const { error } = Joi.validate(data, schema);
+    // if there is an error, return an object with an error property
+    if (error) {
+      res.error = error;
+      return res;
+    }
+    // if there is no error, return data
+    return data;
   }
 
   static async validateProduct(req, res, next) {

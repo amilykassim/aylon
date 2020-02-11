@@ -1,17 +1,16 @@
 import express from 'express';
-import authRoutes from './authRoutes';
-import productRoutes from './productRoutes';
-import userRoutes from './userRoutes';
-// import error from '../middleware/user/error';
+import graphqlHTTP from 'express-graphql';
+import schema from '../graphql/schema';
+import graphQlResolvers from '../graphql/resolvers';
 
 const router = express.Router();
 
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
-router.use('/api/v1/auth', authRoutes);
-router.use('/api/v1/users', userRoutes);
-router.use('/api/v1/products', productRoutes);
-router.use('*', (req, res) => { res.status(400).json({ error: 'the route is invalid' }); });
-//   app.use(error);
+router.use('/aylon', graphqlHTTP({
+  schema,
+  rootValue: graphQlResolvers,
+  graphiql: true,
+}));
 
 export default router;
