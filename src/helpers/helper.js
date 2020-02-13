@@ -1,5 +1,7 @@
 /** Class representing response util. */
 import voca from 'voca';
+import Joi from '@hapi/joi';
+
 
 class Helper {
   constructor() {
@@ -8,6 +10,18 @@ class Helper {
     type ${this.successMessageSchemaName} {
     message: String
   }`;
+  }
+
+  static validate(data, schema) {
+    const res = {};
+    const { error } = Joi.validate(data, schema);
+    // if there is an error, return an object with an error property
+    if (error) {
+      res.error = error;
+      return res;
+    }
+    // if there is no error, return data
+    return data;
   }
 
   static isAuth(user) {
