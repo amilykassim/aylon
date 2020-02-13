@@ -14,9 +14,15 @@ class UserController {
     this.schema = `
         type ${this.schemaName} {
         id: ID!
-        username: String!
-        is_admin: Boolean!
-        is_notification_allowed: Boolean!
+        username: String!,
+        phone_number: String!,
+        role_id: Int!,
+        country_id: Int!
+        email: String,
+        display_name: String,
+        profile_image: String,
+        gender: String,
+        active: Boolean!,
         token: String!
         createdAt: String!
         updatedAt: String!

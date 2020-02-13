@@ -1,9 +1,15 @@
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    email: DataTypes.STRING,
     username: DataTypes.STRING,
+    display_name: DataTypes.STRING,
     password: DataTypes.STRING,
-    is_notification_allowed: DataTypes.BOOLEAN,
-    is_admin: DataTypes.BOOLEAN,
+    phone_number: DataTypes.STRING,
+    profile_image: DataTypes.STRING,
+    active: DataTypes.BOOLEAN,
+    gender: DataTypes.STRING,
+    country_id: DataTypes.INTEGER,
+    role_id: DataTypes.INTEGER,
   }, {});
   // eslint-disable-next-line no-unused-vars
   User.associate = (models) => {

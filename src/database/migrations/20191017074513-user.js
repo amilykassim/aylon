@@ -16,15 +16,38 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    is_notification_allowed: {
+    email: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    display_name: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    phone_number: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    profile_image: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    gender: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    active: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: true,
     },
-    is_admin: {
-      type: Sequelize.BOOLEAN,
+    role_id: {
+      type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: false,
+    },
+    country_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
