@@ -3,7 +3,6 @@ import userValidation from '../validations/userValidation';
 import UserController from './userController';
 import Helper from '../helpers/helper';
 
-
 const {
   save, findUserByUsername,
   generateToken, comparePassword,
@@ -12,7 +11,6 @@ const {
 const { validateSignUp } = userValidation;
 const { trimSpaces } = Helper;
 const user = new UserController();
-
 
 class AuthController {
   constructor() {
