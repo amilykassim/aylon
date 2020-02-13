@@ -15,7 +15,12 @@ const user = new UserController();
 class AuthController {
   constructor() {
     this.loginMutation = `login(username: String!, password: String!): ${user.schemaName}!`;
-    this.signupMutation = `signup(username: String!, password: String!): ${user.schemaName}`;
+    this.signupMutation = `signup(
+      username: String!,
+      password: String!,
+      phone_number: String!,
+      role_id: Int!,
+      country_id: Int!) : ${user.schemaName}`;
   }
 
   static async signup(args) {
@@ -25,7 +30,6 @@ class AuthController {
     let userFound = await findUserByUsername(data.username);
     if (userFound) throw new Error('the username is taken');
 
-    data.is_admin = false;
     userFound = await save(data);
     userFound.token = await generateToken(userFound);
 
