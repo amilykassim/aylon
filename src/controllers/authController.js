@@ -1,19 +1,16 @@
-import voca from 'voca';
 import UserService from '../services/userServices';
-import validations from '../middlewares/validations';
+import userValidation from '../validations/userValidation';
 import UserController from './userController';
 import Helper from '../helpers/helper';
-
 
 const {
   save, findUserByUsername,
   generateToken, comparePassword,
 } = UserService;
 
-const { validateSignUp } = validations;
+const { validateSignUp } = userValidation;
 const { trimSpaces } = Helper;
 const user = new UserController();
-
 
 class AuthController {
   constructor() {
@@ -22,7 +19,7 @@ class AuthController {
   }
 
   static async signup(args) {
-    const data = await validateSignUp(args);
+    const data = validateSignUp(args);
     if (data.error) throw new Error(data.error.details[0].message);
 
     let userFound = await findUserByUsername(data.username);

@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import ProductService from '../services/productServices';
 import Helper from '../helpers/helper';
-import UserService from '../services/userServices';
+import productValidation from '../validations/productValidation';
 
-const { customResponse, isAuth } = Helper;
+const { isAuth } = Helper;
 
 const { getProducts, addNewProduct, editProductService } = ProductService;
-const { findUserById } = UserService;
+const { validateProduct } = productValidation;
 
 class ProductController {
   constructor() {
@@ -51,6 +51,9 @@ class ProductController {
   static async addProduct(args, req) {
     isAuth(req.user);
 
+    const { error } = validateProduct(args);
+    if (error) throw new Error(error.details[0].message);
+
     const data = args;
     data.user_id = req.user.id; // add the user_id to the product
 
@@ -60,6 +63,9 @@ class ProductController {
 
   static async editProduct(args, req) {
     isAuth(req.user);
+
+    const { error } = validateProduct(args);
+    if (error) throw new Error(error.details[0].message);
 
     const newProduct = await editProductService(args, args.product_id, req.user.id);
     if (!newProduct) throw new Error('You are not the owner of the product');
