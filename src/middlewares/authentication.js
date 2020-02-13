@@ -1,7 +1,4 @@
 import jwt from 'jsonwebtoken';
-import Response from '../helpers/response';
-
-const { authenticationError } = Response;
 
 export default (req, res, next) => {
   try {
@@ -12,6 +9,7 @@ export default (req, res, next) => {
 
     next();
   } catch (ex) {
-    authenticationError(res, 'Invalid token');
+    req.user = null;
+    next();
   }
 };

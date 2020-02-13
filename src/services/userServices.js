@@ -5,8 +5,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import database from '../database/models';
+import Helper from '../helpers/helper';
 
 dotenv.config();
+
+const { trimSpaces } = Helper;
 
 class UserService {
   static async generateToken(user) {
@@ -41,7 +44,13 @@ class UserService {
     return user.dataValues;
   }
 
-  static async getUsers(userId) {
+  static async findUserById(id) {
+    const user = await database.User.findOne({ where: { id } });
+    if (!user) return null;
+    return user.dataValues;
+  }
+
+  static async getUsersService(userId) {
     // get only one user if an user id is passed
     if (userId) {
       const user = await database.User.findOne({ where: { id: userId } });
@@ -61,13 +70,33 @@ class UserService {
   }
 
   static async updateProfile(user, loggedInUserId) {
-    // hash the new password before saving it.
-    const hashedPassword = await UserService.hashPassword(user.password);
-    user.password = hashedPassword;
+    if (user.username) {
+      user.username = trimSpaces(user.username);
+      const userFound = await database.User.findAll({ where: { username: user.username } });
+      if (userFound.length > 0) return userFound;
+    }
 
     // update the logged in user's profile
     await database.User.update(user, { where: { id: loggedInUserId } });
     return database.User.findOne({ where: { id: loggedInUserId } });
+  }
+
+  static async changePassword(data, user) {
+    const searchUser = await UserService.findUserByUsername(user.username);
+
+    // check if password is valid
+    const comparePass = await UserService.comparePassword(data.currentPassword, searchUser.password);
+    if (!comparePass) throw new Error('Your current password is invalid, please retype it again carefully');
+
+    // hash the new password before saving it.
+    if (data.newPassword) {
+      const hashedPassword = await UserService.hashPassword(data.newPassword);
+      searchUser.password = hashedPassword;
+    }
+
+    // update the logged in user's password
+    await database.User.update(searchUser, { where: { id: user.id } });
+    return database.User.findOne({ where: { id: user.id } });
   }
 }
 

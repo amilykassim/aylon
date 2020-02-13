@@ -1,32 +1,70 @@
 /* eslint-disable max-len */
 import ProductService from '../services/productServices';
-import Response from '../helpers/response';
+import Helper from '../helpers/helper';
+import UserService from '../services/userServices';
 
-const { customResponse, badRequestError } = Response;
+const { customResponse, isAuth } = Helper;
 
 const { getProducts, addNewProduct, editProductService } = ProductService;
+const { findUserById } = UserService;
 
 class ProductController {
-  static async getAllProducts(req, res) {
-    const products = await getProducts(req.user.id, req.params.product_id);
-    if (!products) return badRequestError(res, `Product with id ${req.params.product_id} is not found in your products list`);
+  constructor() {
+    this.schemaName = 'Product';
+    this.schema = `
+        type ${this.schemaName} {
+        id: ID!
+        user_id: Int!
+        category: String!
+        name: String!
+        price: Int!
+        quantity: Int!
+        createdAt: String!
+        updatedAt: String!
+      }`;
 
-    if (products.length < 1) return badRequestError(res, 'No products found');
-
-    customResponse(res, 200, 'All of your products', products);
+    this.getProducts = `getProducts(productId: Int): [${this.schemaName}]`;
+    this.addProduct = `addProduct(
+      category: String!,
+      name: String!,
+      price: Int!
+      quantity: Int!
+    ): ${this.schemaName}`;
+    this.editProduct = `editProduct(
+      product_id: Int!,
+      category: String!,
+      name: String!,
+      price: Int!
+      quantity: Int!
+    ): ${this.schemaName}`;
   }
 
-  static async addProduct(req, res) {
-    req.body.user_id = req.user.id; // add the userId to the product
-    const newProduct = await addNewProduct(req.body);
+  static async getProducts(args, req) {
+    const products = await getProducts(req.user.id, args.productId);
+    if (!products) throw new Error(`Product with id ${args.productId} is not found in your products list`);
 
-    customResponse(res, 200, 'Product added successfully', newProduct);
+    if (products.length < 1) throw new Error('No products found');
+
+    return products;
   }
 
-  static async editProduct(req, res) {
-    const newProduct = await editProductService(req.body, req.params.product_id, req.user.id);
+  static async addProduct(args, req) {
+    isAuth(req.user);
 
-    customResponse(res, 200, 'Edited product successfully', newProduct);
+    const data = args;
+    data.user_id = req.user.id; // add the user_id to the product
+
+    const newProduct = await addNewProduct(data);
+    return newProduct;
+  }
+
+  static async editProduct(args, req) {
+    isAuth(req.user);
+
+    const newProduct = await editProductService(args, args.product_id, req.user.id);
+    if (!newProduct) throw new Error('You are not the owner of the product');
+
+    return newProduct;
   }
 }
 
