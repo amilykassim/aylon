@@ -14,37 +14,47 @@ class ProductController {
     this.schema = `
         type ${this.schemaName} {
         id: ID!
-        user_id: Int!
-        category: String!
-        name: String!
-        price: Int!
-        quantity: Int!
+        shop_id: Int!,
+        name: String!,
+        description: String!,
+        image1: String!,
+        image2: String!,
+        image3: String!,
+        price: Int!,
+        category_id: Int!
         createdAt: String!
         updatedAt: String!
       }`;
 
-    this.getProducts = `getProducts(productId: Int): [${this.schemaName}]`;
+    this.getProducts = `getProducts(shop_id: Int!, product_id: Int): [${this.schemaName}]`;
     this.addProduct = `addProduct(
-      category: String!,
+      shop_id: Int!,
       name: String!,
-      price: Int!
-      quantity: Int!
+      description: String!,
+      image1: String!,
+      image2: String!,
+      image3: String!,
+      price: Int!,
+      category_id: Int!
     ): ${this.schemaName}`;
     this.editProduct = `editProduct(
       product_id: Int!,
-      category: String!,
+      shop_id: Int!,
       name: String!,
-      price: Int!
-      quantity: Int!
+      description: String!,
+      image1: String!,
+      image2: String!,
+      image3: String!,
+      price: Int!,
+      category_id: Int!
     ): ${this.schemaName}`;
   }
 
   static async getProducts(args, req) {
-    const products = await getProducts(req.user.id, args.productId);
-    if (!products) throw new Error(`Product with id ${args.productId} is not found in your products list`);
+    const products = await getProducts(args.shop_id, args.product_id);
+    if (!products) throw new Error(`Product with id ${args.product_id} is not found in this shop`);
 
-    if (products.length < 1) throw new Error('No products found');
-
+    if (products.length < 1) return [];
     return products;
   }
 
@@ -54,10 +64,7 @@ class ProductController {
     const { error } = validateProduct(args);
     if (error) throw new Error(error.details[0].message);
 
-    const data = args;
-    data.user_id = req.user.id; // add the user_id to the product
-
-    const newProduct = await addNewProduct(data);
+    const newProduct = await addNewProduct(args);
     return newProduct;
   }
 
@@ -67,7 +74,7 @@ class ProductController {
     const { error } = validateProduct(args);
     if (error) throw new Error(error.details[0].message);
 
-    const newProduct = await editProductService(args, args.product_id, req.user.id);
+    const newProduct = await editProductService(args);
     if (!newProduct) throw new Error('You are not the owner of the product');
 
     return newProduct;
