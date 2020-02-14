@@ -5,8 +5,9 @@ import productValidation from '../validations/productValidation';
 
 const { isAuth } = Helper;
 
-const { getProducts, addNewProduct, editProductService } = ProductService;
+const { getProducts, addNewProduct, editProductService, deleteProductService } = ProductService;
 const { validateProduct } = productValidation;
+const helper = new Helper();
 
 class ProductController {
   constructor() {
@@ -26,7 +27,11 @@ class ProductController {
         updatedAt: String!
       }`;
 
-    this.getProducts = `getProducts(shop_id: Int!, product_id: Int): [${this.schemaName}]`;
+    this.getProducts = `getProducts(
+      shop_id: Int!, 
+      product_id: Int
+    ): [${this.schemaName}]`;
+
     this.addProduct = `addProduct(
       shop_id: Int!,
       name: String!,
@@ -37,6 +42,7 @@ class ProductController {
       price: Int!,
       category_id: Int!
     ): ${this.schemaName}`;
+
     this.editProduct = `editProduct(
       product_id: Int!,
       shop_id: Int!,
@@ -48,9 +54,16 @@ class ProductController {
       price: Int!,
       category_id: Int!
     ): ${this.schemaName}`;
+
+    this.deleteProduct = `deleteProduct(
+      shop_id: Int!,
+      product_id: Int
+    ): ${helper.successMessageSchemaName}`;
   }
 
   static async getProducts(args, req) {
+    isAuth(req.user);
+
     const products = await getProducts(args.shop_id, args.product_id);
     if (!products) throw new Error(`Product with id ${args.product_id} is not found in this shop`);
 
@@ -78,6 +91,15 @@ class ProductController {
     if (!newProduct) throw new Error('You are not the owner of the product');
 
     return newProduct;
+  }
+
+  static async deleteProduct(args, req) {
+    isAuth(req.user);
+
+    const deletedProduct = await deleteProductService(args);
+    if (!deletedProduct) return { message: `There is no product with id ${args.product_id} in this shop of id ${args.shop_id}` };
+
+    return { message: 'Delete the product successfully' };
   }
 }
 

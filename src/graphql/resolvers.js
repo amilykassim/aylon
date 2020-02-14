@@ -7,7 +7,9 @@ const {
   getUsers, getMyProfile, editProfile, changePassword,
 } = UserController;
 
-const { getProducts, addProduct, editProduct } = ProductController;
+const {
+  getProducts, addProduct, editProduct, deleteProduct,
+} = ProductController;
 
 const rootResolver = {
   signup,
@@ -19,6 +21,7 @@ const rootResolver = {
   getProducts,
   addProduct,
   editProduct,
+  deleteProduct,
 };
 
 export default rootResolver;
