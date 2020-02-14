@@ -1,19 +1,20 @@
+/* eslint-disable max-len */
 import Sequelize from 'sequelize';
 import database from '../database/models';
 
 const { Op } = Sequelize;
 
 class ProductService {
-  static async getProducts(userId, productId) {
-    // get only one product of a given user
+  static async getProducts(shopId, productId) {
+    // get only one product of a given shop
     if (productId) {
-      const product = await database.Product.findOne({ where: { user_id: userId, id: productId } });
+      const product = await database.Product.findOne({ where: { shop_id: shopId, id: productId } });
       if (!product) return null;
-      return product.dataValues;
+      return [product.dataValues];
     }
 
-    // get all of the products of a given user
-    const products = await database.Product.findAll({ where: { user_id: userId } });
+    // get all of the products of a given shop
+    const products = await database.Product.findAll({ where: { shop_id: shopId } });
     return products.map(({ dataValues: product }) => product);
   }
 
@@ -21,16 +22,16 @@ class ProductService {
     return database.Product.create(product);
   }
 
-  static async editProductService(product, productId, userId) {
+  static async editProductService(product) {
     await database.Product.update(product, {
       where: {
         [Op.and]: [
-          { id: productId },
-          { user_id: userId }],
+          { id: product.product_id },
+          { shop_id: product.shop_id }],
       },
     });
 
-    return database.Product.findOne({ where: { user_id: userId, id: productId } });
+    return database.Product.findOne({ where: { shop_id: product.shop_id, id: product.product_id } });
   }
 }
 

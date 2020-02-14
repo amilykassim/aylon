@@ -7,30 +7,36 @@ export function up(queryInterface, Sequelize) {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    user_id: {
+    shop_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
-    },
-    category: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        isIn: {
-          args: [['beverage', 'food']],
-          msg: 'Invalid category. You can beverage, food, etc...',
-        },
-      },
     },
     name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    price: {
+    description: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    image1: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    image2: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    image3: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    category_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    quantity: {
-      type: Sequelize.INTEGER,
+    price: {
+      type: Sequelize.FLOAT,
       allowNull: false,
     },
     createdAt: {

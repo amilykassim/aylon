@@ -13,9 +13,9 @@ export default (sequelize, DataTypes) => {
   }, {});
   // eslint-disable-next-line no-unused-vars
   User.associate = (models) => {
-    User.hasMany(models.Product, {
-      foreignKey: 'user_id',
-    });
+    // User.hasMany(models.Product, {
+    //   foreignKey: 'user_id',
+    // });
   };
   return User;
 };
