@@ -33,6 +33,20 @@ class ProductService {
 
     return database.Product.findOne({ where: { shop_id: product.shop_id, id: product.product_id } });
   }
+
+  static async deleteProductService(product) {
+    // database.Request.destroy({ where: { id } });
+
+    return database.Product.destroy({
+      where: {
+        [Op.and]: [
+          { id: product.product_id },
+          { shop_id: product.shop_id }],
+      },
+    });
+
+    // return database.Product.findOne({ where: { shop_id: product.shop_id, id: product.product_id } });
+  }
 }
 
 export default ProductService;
