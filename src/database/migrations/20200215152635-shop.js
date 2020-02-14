@@ -1,15 +1,21 @@
 
 export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable('Products', {
+  return queryInterface.createTable('Shops', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    shop_id: {
+    user_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'user_id',
+      },
     },
     name: {
       type: Sequelize.STRING,
@@ -19,24 +25,25 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    image1: {
+    image: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    image2: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    image3: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    category_id: {
+    country_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      references: {
+        model: 'Countries',
+        id: 'id',
+        as: 'country_id',
+      },
     },
-    price: {
-      type: Sequelize.FLOAT,
+    active: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    },
+    is_verified: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     createdAt: {
@@ -50,4 +57,4 @@ export function up(queryInterface, Sequelize) {
   });
 }
 // eslint-disable-next-line no-unused-vars
-export function down(queryInterface, Sequelize) { return queryInterface.dropTable('Products'); }
+export function down(queryInterface, Sequelize) { return queryInterface.dropTable('Shops'); }

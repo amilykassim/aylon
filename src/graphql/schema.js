@@ -28,6 +28,7 @@ type RootMutation {
     ${user.changePassword}
     ${product.addProduct}
     ${product.editProduct}
+    ${product.deleteProduct}
 }
 
 schema {
