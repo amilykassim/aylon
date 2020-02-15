@@ -41,10 +41,12 @@ export function up(queryInterface, Sequelize) {
     active: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: true,
     },
     is_verified: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     createdAt: {
       allowNull: false,

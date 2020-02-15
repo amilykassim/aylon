@@ -16,7 +16,7 @@ class UserController {
         id: ID!
         username: String!,
         phone_number: String!,
-        role_id: Int!,
+        role_value: Int!,
         country_id: Int!
         email: String,
         display_name: String,

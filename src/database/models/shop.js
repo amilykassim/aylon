@@ -19,9 +19,9 @@ export default (sequelize, DataTypes) => {
     Shop.hasMany(models.Product, {
       foreignKey: 'shop_id',
     });
-    Shop.hasMany(models.Follower, {
-      foreignKey: 'shop_id',
-    });
+    // Shop.hasMany(models.Follower, {
+    //   foreignKey: 'shop_id',
+    // });
   };
 
   return Shop;

@@ -5,9 +5,9 @@ export default (sequelize, DataTypes) => {
   }, {});
   // eslint-disable-next-line no-unused-vars
   Follower.associate = (models) => {
-    Follower.belongsToMany(models.Shop, {
-      foreignKey: 'shop_id',
-    });
+    // Follower.belongsToMany(models.Shop, {
+    //   foreignKey: 'shop_id',
+    // });
   };
   return Follower;
 };

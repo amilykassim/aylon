@@ -5,6 +5,11 @@ export async function up(queryInterface, Sequelize) {
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    name: 'France',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   ], {});
 }
 

@@ -5,7 +5,9 @@ import productValidation from '../validations/productValidation';
 
 const { isAuth } = Helper;
 
-const { getProducts, addNewProduct, editProductService, deleteProductService } = ProductService;
+const {
+  getProducts, addNewProduct, editProductService, deleteProductService,
+} = ProductService;
 const { validateProduct } = productValidation;
 const helper = new Helper();
 
