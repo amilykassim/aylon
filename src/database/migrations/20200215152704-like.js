@@ -11,10 +11,22 @@ export function up(queryInterface, Sequelize) {
     product_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Products',
+        key: 'id',
+        as: 'product_id',
+      },
     },
     user_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'user_id',
+      },
     },
     createdAt: {
       allowNull: false,

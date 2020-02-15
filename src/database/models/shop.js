@@ -13,12 +13,13 @@ export default (sequelize, DataTypes) => {
     Shop.belongsTo(models.User, {
       foreignKey: 'user_id',
     });
-
     Shop.belongsTo(models.Country, {
       foreignKey: 'country_id',
     });
-
     Shop.hasMany(models.Product, {
+      foreignKey: 'shop_id',
+    });
+    Shop.hasMany(models.Follower, {
       foreignKey: 'shop_id',
     });
   };

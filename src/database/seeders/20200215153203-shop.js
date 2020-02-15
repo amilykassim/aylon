@@ -3,7 +3,7 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.bulkInsert('Shops', [{
     user_id: 2,
-    name: 'Jordan Max',
+    name: 'Jordan Max Shop',
     description: 'This is the ultra Jordan Max',
     image: 'https://www.dreamstime.com/bangkok-thailand-january-nike-shop-opening-siam-square-one-shopping-mall-popular-located-sqaure-image138469677',
     country_id: 1,
@@ -14,7 +14,7 @@ export function up(queryInterface, Sequelize) {
   },
   {
     user_id: 1,
-    name: 'AirMax',
+    name: 'AirMax Shop',
     description: 'This is the ultra AirMax',
     image: 'https://www.dreamstime.com/bangkok-thailand-january-nike-shop-opening-siam-square-one-shopping-mall-popular-located-sqaure-image138469677',
     country_id: 1,

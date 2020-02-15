@@ -11,14 +11,32 @@ export function up(queryInterface, Sequelize) {
     product_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Products',
+        key: 'id',
+        as: 'product_id',
+      },
     },
     from: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'from',
+      },
     },
     to: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'to',
+      },
     },
     message: {
       type: Sequelize.STRING,

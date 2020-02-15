@@ -16,15 +16,12 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Shop, {
       foreignKey: 'user_id',
     });
-
     User.belongsTo(models.Role, {
       foreignKey: 'role_value',
     });
-
     User.belongsTo(models.Country, {
       foreignKey: 'country_id',
     });
-
     User.hasOne(models.Preference, {
       foreignKey: 'user_id',
     });

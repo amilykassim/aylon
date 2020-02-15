@@ -7,8 +7,8 @@ export default (sequelize, DataTypes) => {
   }, {});
   // eslint-disable-next-line no-unused-vars
   Chat.associate = (models) => {
-    Chat.hasMany(models.User, {
-      foreignKey: 'chat_id',
+    Chat.belongsTo(models.Product, {
+      foreignKey: 'product_id',
     });
   };
   return Chat;
