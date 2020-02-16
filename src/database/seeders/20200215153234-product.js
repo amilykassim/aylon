@@ -20,7 +20,7 @@ export function up(queryInterface, Sequelize) {
     image1: 'https://84000trendz.com/product/long-sleeve-t-shirts-white-black-combination-for-men/',
     image2: 'https://84000trendz.com/product/long-sleeve-t-shirts-white-black-combination-for-men/',
     image3: 'https://84000trendz.com/product/long-sleeve-t-shirts-white-black-combination-for-men/',
-    category_id: 2,
+    category_id: 1,
     price: 5000,
     createdAt: new Date(),
     updatedAt: new Date(),

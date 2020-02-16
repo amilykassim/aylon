@@ -10,6 +10,12 @@ export function up(queryInterface, Sequelize) {
     shop_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Shops',
+        key: 'id',
+        as: 'shop_id',
+      },
     },
     name: {
       type: Sequelize.STRING,
@@ -34,6 +40,11 @@ export function up(queryInterface, Sequelize) {
     category_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      references: {
+        model: 'Categories',
+        key: 'id',
+        as: 'category_id',
+      },
     },
     price: {
       type: Sequelize.FLOAT,

@@ -2,10 +2,14 @@
 import ProductService from '../services/productServices';
 import Helper from '../helpers/helper';
 import productValidation from '../validations/productValidation';
+import ShopService from '../services/shopServices';
 
 const { isAuth } = Helper;
 
-const { getProducts, addNewProduct, editProductService, deleteProductService } = ProductService;
+const {
+  getProducts, addNewProduct, editProductService, deleteProductService,
+} = ProductService;
+const { checkIfIsYourShop } = ShopService;
 const { validateProduct } = productValidation;
 const helper = new Helper();
 
@@ -64,6 +68,11 @@ class ProductController {
   static async getProducts(args, req) {
     isAuth(req.user);
 
+    // check if it is your shop
+    const isYourShop = await checkIfIsYourShop(args.shop_id, req.user.id);
+    if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
+
+
     const products = await getProducts(args.shop_id, args.product_id);
     if (!products) throw new Error(`Product with id ${args.product_id} is not found in this shop`);
 
@@ -87,6 +96,10 @@ class ProductController {
     const { error } = validateProduct(args);
     if (error) throw new Error(error.details[0].message);
 
+    // check if it is your shop
+    const isYourShop = await checkIfIsYourShop(args.shop_id, req.user.id);
+    if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
+
     const newProduct = await editProductService(args);
     if (!newProduct) throw new Error('You are not the owner of the product');
 
@@ -95,6 +108,10 @@ class ProductController {
 
   static async deleteProduct(args, req) {
     isAuth(req.user);
+
+    // check if it is your shop
+    const isYourShop = await checkIfIsYourShop(args.shop_id, req.user.id);
+    if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
 
     const deletedProduct = await deleteProductService(args);
     if (!deletedProduct) return { message: `There is no product with id ${args.product_id} in this shop of id ${args.shop_id}` };

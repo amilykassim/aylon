@@ -11,10 +11,18 @@ export default (sequelize, DataTypes) => {
   }, {});
   Product.associate = (models) => {
     // associations can be defined here
-    // Product.belongsTo(models.User, {
-    //   foreignKey: 'user_id',
-    //   as: 'user',
-    // });
+    Product.belongsTo(models.Shop, {
+      foreignKey: 'shop_id',
+    });
+    Product.belongsTo(models.Category, {
+      foreignKey: 'category_id',
+    });
+    Product.hasMany(models.Like, {
+      foreignKey: 'product_id',
+    });
+    Product.hasMany(models.Chat, {
+      foreignKey: 'product_id',
+    });
   };
 
   return Product;

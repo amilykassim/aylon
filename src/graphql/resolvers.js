@@ -1,6 +1,7 @@
 import AuthController from '../controllers/authController';
 import UserController from '../controllers/userController';
 import ProductController from '../controllers/productController';
+import ShopController from '../controllers/shopController';
 
 const { signup, login } = AuthController;
 const {
@@ -10,6 +11,10 @@ const {
 const {
   getProducts, addProduct, editProduct, deleteProduct,
 } = ProductController;
+
+const {
+  getShops, addShop, editShop, deleteShop,
+} = ShopController;
 
 const rootResolver = {
   signup,
@@ -22,6 +27,10 @@ const rootResolver = {
   addProduct,
   editProduct,
   deleteProduct,
+  getShops,
+  addShop,
+  editShop,
+  deleteShop,
 };
 
 export default rootResolver;

@@ -1,53 +1,52 @@
-/* eslint-disable no-unused-vars */
 
 export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable('Users', {
+  return queryInterface.createTable('Shops', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    username: {
+    user_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'user_id',
+      },
+    },
+    name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    password: {
+    description: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-    display_name: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-    phone_number: {
+    image: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    profile_image: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: Sequelize.STRING,
-      allowNull: true,
+    country_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Countries',
+        id: 'id',
+        as: 'country_id',
+      },
     },
     active: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: true,
     },
-    role_id: {
-      type: Sequelize.INTEGER,
+    is_verified: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-    },
-    country_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
+      defaultValue: false,
     },
     createdAt: {
       allowNull: false,
@@ -60,5 +59,4 @@ export function up(queryInterface, Sequelize) {
   });
 }
 // eslint-disable-next-line no-unused-vars
-
-export function down(queryInterface, Sequelize) { return queryInterface.dropTable('Users'); }
+export function down(queryInterface, Sequelize) { return queryInterface.dropTable('Shops'); }

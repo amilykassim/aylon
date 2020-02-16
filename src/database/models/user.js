@@ -9,13 +9,22 @@ export default (sequelize, DataTypes) => {
     active: DataTypes.BOOLEAN,
     gender: DataTypes.STRING,
     country_id: DataTypes.INTEGER,
-    role_id: DataTypes.INTEGER,
+    role_value: DataTypes.INTEGER,
   }, {});
   // eslint-disable-next-line no-unused-vars
   User.associate = (models) => {
-    // User.hasMany(models.Product, {
-    //   foreignKey: 'user_id',
-    // });
+    User.hasMany(models.Shop, {
+      foreignKey: 'user_id',
+    });
+    User.belongsTo(models.Role, {
+      foreignKey: 'role_value',
+    });
+    User.belongsTo(models.Country, {
+      foreignKey: 'country_id',
+    });
+    User.hasOne(models.Preference, {
+      foreignKey: 'user_id',
+    });
   };
   return User;
 };
