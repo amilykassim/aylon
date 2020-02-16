@@ -30,6 +30,7 @@ type RootMutation {
     ${auth.loginMutation}
     ${user.editProfile}
     ${user.changePassword}
+    ${user.assignRole}
     ${product.addProduct}
     ${product.editProduct}
     ${product.deleteProduct}

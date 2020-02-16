@@ -4,7 +4,7 @@ import Helper from '../helpers/helper';
 const helper = new Helper();
 const { isAuth } = Helper;
 const {
-  getUsersService, getMyProfileData, updateProfile, changePassword,
+  getUsersService, getMyProfileData, updateProfile, changePassword, updateRole
 } = UserService;
 
 
@@ -30,8 +30,27 @@ class UserController {
 
     this.getUsers = `getUsers(userId: Int): [${this.schemaName}]`;
     this.getMyProfile = `getMyProfile: ${this.schemaName}`;
-    this.editProfile = `editProfile(username: String, is_admin: Boolean): ${this.schemaName}`;
-    this.changePassword = `changePassword(currentPassword: String!, newPassword: String!): ${helper.successMessageSchemaName}`;
+
+    this.editProfile = `editProfile(
+        username: String,
+        phone_number: String,
+        country_id: Int
+        email: String,
+        display_name: String,
+        profile_image: String,
+        gender: String,
+        active: Boolean,
+    ): ${this.schemaName}`;
+
+    this.changePassword = `changePassword(
+      currentPassword: String!,
+      newPassword: String!
+    ): ${helper.successMessageSchemaName}`;
+
+    this.assignRole = `assignRole(
+      user_id: Int!,
+      role_value: Int!
+    ): ${this.schemaName}`;
   }
 
   // if there is user id, get only one user otherwise get all users
@@ -60,6 +79,18 @@ class UserController {
     await changePassword(args, req.user);
 
     return { message: 'Password was changed successfully!' };
+  }
+
+  static async assignRole(args, req) {
+    isAuth(req.user);
+    if (req.user.role_value !== 7) throw new Error('You are not a super admin!');
+
+    if (![1, 7].includes(args.role_value)) throw new Error(`The role value ${args.role_value} does not exists`);
+
+    const user = await updateRole(args, args.user_id);
+
+    if (!user) throw new Error('Failed to update user role');
+    return user.dataValues;
   }
 }
 

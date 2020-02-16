@@ -16,6 +16,7 @@ class UserService {
     return jwt.sign({
       id: user.id,
       username: user.username,
+      role_value: user.role_value,
     }, process.env.JWT_PRIVATE_KEY);
   }
 
@@ -79,6 +80,11 @@ class UserService {
     // update the logged in user's profile
     await database.User.update(user, { where: { id: loggedInUserId } });
     return database.User.findOne({ where: { id: loggedInUserId } });
+  }
+
+  static async updateRole(data, userId) {
+    await database.User.update(data, { where: { id: userId } });
+    return database.User.findOne({ where: { id: userId } });
   }
 
   static async changePassword(data, user) {

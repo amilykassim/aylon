@@ -5,7 +5,7 @@ import ShopController from '../controllers/shopController';
 
 const { signup, login } = AuthController;
 const {
-  getUsers, getMyProfile, editProfile, changePassword,
+  getUsers, getMyProfile, editProfile, changePassword, assignRole,
 } = UserController;
 
 const {
@@ -23,6 +23,7 @@ const rootResolver = {
   getMyProfile,
   editProfile,
   changePassword,
+  assignRole,
   getProducts,
   addProduct,
   editProduct,
