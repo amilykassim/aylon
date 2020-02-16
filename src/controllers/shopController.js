@@ -30,7 +30,8 @@ class ShopController {
       }`;
 
     this.getShops = `getShops(
-       shop_id: Int, 
+       shop_id: Int,
+       name: String
     ): [${this.schemaName}]`;
 
     this.addShop = `addShop(
@@ -57,6 +58,20 @@ class ShopController {
 
   static async getShops(args, req) {
     isAuth(req.user);
+
+    if (args.name) {
+      const shops = await getAllShops();
+      // get all shop/s name that matches the name passed
+      const exactMatch = shops.filter((shop) => trimSpaces(shop.name) === trimSpaces(args.name));
+      // get all shop/s name contains the name passed
+      const containsMatch = shops.filter((shop) => trimSpaces(shop.name).includes(trimSpaces(args.name)));
+      const foundShop = [...exactMatch, ...containsMatch];
+      // remove duplicates
+      const uniquefoundShop = Array.from(new Set(foundShop));
+
+      if (uniquefoundShop.length === 0) throw new Error('Sorry, we did not find any results related to your search');
+      return uniquefoundShop;
+    }
 
     const shops = await getShopsService(args.shop_id, req.user.id);
     if (!shops) throw new Error(`You don't have a shop with id ${args.shop_id}`);
