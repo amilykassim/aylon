@@ -8,14 +8,14 @@ class Validations {
   static validateProduct(args) {
     const schema = {
       product_id: Joi.number().integer().min(1),
-      shop_id: Joi.number().integer().required().min(1),
-      category_id: Joi.number().integer().required().min(1),
-      name: Joi.string().required().min(3).max(255),
-      description: Joi.string().required().min(3).max(1000),
-      price: Joi.number().integer().required().min(1),
-      image1: Joi.string().required().min(3).max(510),
-      image2: Joi.string().required().min(3).max(510),
-      image3: Joi.string().required().min(3).max(510),
+      shop_id: Joi.number().integer().min(1),
+      category_id: Joi.number().integer().min(1),
+      name: Joi.string().min(3).max(255),
+      description: Joi.string().min(3).max(1000),
+      price: Joi.number().integer().min(1),
+      image1: Joi.string().min(3).max(510),
+      image2: Joi.string().min(3).max(510),
+      image3: Joi.string().min(3).max(510),
     };
 
     return validate(args, schema);

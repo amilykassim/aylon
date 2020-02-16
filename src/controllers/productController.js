@@ -50,13 +50,13 @@ class ProductController {
     this.editProduct = `editProduct(
       product_id: Int!,
       shop_id: Int!,
-      name: String!,
-      description: String!,
-      image1: String!,
-      image2: String!,
-      image3: String!,
-      price: Int!,
-      category_id: Int!
+      name: String,
+      description: String,
+      image1: String,
+      image2: String,
+      image3: String,
+      price: Int,
+      category_id: Int
     ): ${this.schemaName}`;
 
     this.deleteProduct = `deleteProduct(
@@ -74,7 +74,7 @@ class ProductController {
 
 
     const products = await getProducts(args.shop_id, args.product_id);
-    if (!products) throw new Error(`Product with id ${args.product_id} is not found in this shop`);
+    if (!products) throw new Error(`You do not have a product with id ${args.product_id} under your shop of id ${args.shop_id}`);
 
     if (products.length < 1) return [];
     return products;
@@ -101,7 +101,7 @@ class ProductController {
     if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
 
     const newProduct = await editProductService(args);
-    if (!newProduct) throw new Error('You are not the owner of the product');
+    if (!newProduct) throw new Error(`You do not have a product with id ${args.product_id} under your shop of id ${args.shop_id}`);
 
     return newProduct;
   }
@@ -114,7 +114,7 @@ class ProductController {
     if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
 
     const deletedProduct = await deleteProductService(args);
-    if (!deletedProduct) return { message: `There is no product with id ${args.product_id} in this shop of id ${args.shop_id}` };
+    if (!deletedProduct) return { message: `You do not have a product with id ${args.product_id} under your shop of id ${args.shop_id}` };
 
     return { message: 'Delete the product successfully' };
   }
