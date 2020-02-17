@@ -9,7 +9,7 @@ const {
 } = UserController;
 
 const {
-  getProducts, addProduct, editProduct, deleteProduct,
+  getProducts, addProduct, editProduct, deleteProduct, searchProducts
 } = ProductController;
 
 const {
@@ -25,6 +25,7 @@ const rootResolver = {
   changePassword,
   assignRole,
   getProducts,
+  searchProducts,
   addProduct,
   editProduct,
   deleteProduct,

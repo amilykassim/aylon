@@ -59,6 +59,7 @@ class ShopController {
   static async getShops(args, req) {
     isAuth(req.user);
 
+    // if there is username, then it is a search
     if (args.name) {
       const shops = await getAllShops();
       // get all shop/s name that matches the name passed
@@ -73,6 +74,7 @@ class ShopController {
       return uniquefoundShop;
     }
 
+    // otherwise get a shop according to it's id
     const shops = await getShopsService(args.shop_id, req.user.id);
     if (!shops) throw new Error(`You don't have a shop with id ${args.shop_id}`);
 

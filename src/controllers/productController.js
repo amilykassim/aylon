@@ -36,6 +36,28 @@ class ProductController {
       product_id: Int
     ): [${this.schemaName}]`;
 
+
+    this.tableStringFilterInputSchemaName = 'TableStringFilterInput';
+    this.tableStringFilterInputSchema = `input ${this.tableStringFilterInputSchemaName} {
+      ne: String
+      eq: String
+      le: String
+      lt: String
+      ge: String
+      gt: String
+      contains: String
+      notContains: String
+      starWith: String
+    }`;
+
+    this.productFilterInputSchemaName = 'ProductFilterInput';
+    this.productFilterInputSchema = `input ${this.productFilterInputSchemaName} {
+      name: ${this.tableStringFilterInputSchemaName}
+      description: String
+    }`;
+
+    this.searchProducts = `searchProducts(filter: ${this.productFilterInputSchemaName}): ${this.schemaName}`;
+
     this.addProduct = `addProduct(
       shop_id: Int!,
       name: String!,
@@ -78,6 +100,13 @@ class ProductController {
 
     if (products.length < 1) return [];
     return products;
+  }
+
+  static async searchProducts(args, req) {
+    isAuth(req.user);
+
+    // check if it is your shop
+    console.log('the result is: ', args.filter.name.contains);
   }
 
   static async addProduct(args, req) {
