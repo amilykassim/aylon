@@ -36,6 +36,7 @@ type RootMutation {
     ${product.addProduct}
     ${product.editProduct}
     ${product.deleteProduct}
+    ${product.likeProduct}
     ${shop.addShop}
     ${shop.editShop}
     ${shop.deleteShop}
