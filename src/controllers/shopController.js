@@ -64,9 +64,11 @@ class ShopController {
       const shops = await getAllShops();
       // get all shop/s name that matches the name passed
       const exactMatch = shops.filter((shop) => trimSpaces(shop.name) === trimSpaces(args.name));
+      // get all products name that starts with the name passed
+      const startWithMatch = shops.filter((shop) => trimSpaces(shop.name).startsWith(trimSpaces(args.name)));
       // get all shop/s name contains the name passed
       const containsMatch = shops.filter((shop) => trimSpaces(shop.name).includes(trimSpaces(args.name)));
-      const foundShop = [...exactMatch, ...containsMatch];
+      const foundShop = [...exactMatch, ...startWithMatch, ...containsMatch];
       // remove duplicates
       const uniquefoundShop = Array.from(new Set(foundShop));
 

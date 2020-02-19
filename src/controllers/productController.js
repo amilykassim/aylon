@@ -8,9 +8,11 @@ const { isAuth } = Helper;
 
 const {
   getProducts, addNewProduct, editProductService, deleteProductService,
+  getAllProductsAccordingCategory
 } = ProductService;
 const { checkIfIsYourShop } = ShopService;
 const { validateProduct } = productValidation;
+const { trimSpaces } = Helper;
 const helper = new Helper();
 
 class ProductController {
@@ -36,27 +38,15 @@ class ProductController {
       product_id: Int
     ): [${this.schemaName}]`;
 
-
-    this.tableStringFilterInputSchemaName = 'TableStringFilterInput';
-    this.tableStringFilterInputSchema = `input ${this.tableStringFilterInputSchemaName} {
-      ne: String
-      eq: String
-      le: String
-      lt: String
-      ge: String
-      gt: String
-      contains: String
-      notContains: String
-      starWith: String
-    }`;
-
     this.productFilterInputSchemaName = 'ProductFilterInput';
     this.productFilterInputSchema = `input ${this.productFilterInputSchemaName} {
-      name: ${this.tableStringFilterInputSchemaName}
+      categoryId: Int!
+      name: String
       description: String
+      price: Int
     }`;
 
-    this.searchProducts = `searchProducts(filter: ${this.productFilterInputSchemaName}): ${this.schemaName}`;
+    this.searchProducts = `searchProducts(filter: ${this.productFilterInputSchemaName}): [${this.schemaName}]`;
 
     this.addProduct = `addProduct(
       shop_id: Int!,
@@ -105,8 +95,19 @@ class ProductController {
   static async searchProducts(args, req) {
     isAuth(req.user);
 
-    // check if it is your shop
-    console.log('the result is: ', args.filter.name.contains);
+    const products = await getAllProductsAccordingCategory(args.filter.categoryId);
+    // get all products name that matches the name passed
+    const exactMatch = products.filter((product) => trimSpaces(product.name) === trimSpaces(args.filter.name));
+    // get all products name that starts with the name passed
+    const startWithMatch = products.filter((product) => trimSpaces(product.name).startsWith(trimSpaces(args.filter.name)));
+    // get all productss name contains the name passed
+    const containsMatch = products.filter((product) => trimSpaces(product.name).includes(trimSpaces(args.filter.name)));
+    const foundproducts = [...exactMatch, ...startWithMatch, ...containsMatch];
+    // remove duplicates
+    const uniqueFoundProducts = Array.from(new Set(foundproducts));
+
+    if (uniqueFoundProducts.length === 0) throw new Error('Sorry, we did not find any results related to your search');
+    return uniqueFoundProducts;
   }
 
   static async addProduct(args, req) {

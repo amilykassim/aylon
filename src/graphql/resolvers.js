@@ -9,7 +9,7 @@ const {
 } = UserController;
 
 const {
-  getProducts, addProduct, editProduct, deleteProduct, searchProducts
+  getProducts, addProduct, editProduct, deleteProduct, searchProducts,
 } = ProductController;
 
 const {

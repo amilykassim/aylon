@@ -12,15 +12,12 @@ const product = new ProductController();
 const shop = new ShopController();
 const helper = new Helper();
 
-const some = 'input ProductFilterInput { name: String! description: String! }';
-
 module.exports = buildSchema(`
 ${user.schema}
 ${product.schema}
 ${shop.schema}
 ${helper.successMessageSchema}
 ${product.productFilterInputSchema}
-${product.tableStringFilterInputSchema}
 
 type RootQuery {
     ${user.getUsers}
@@ -42,7 +39,6 @@ type RootMutation {
     ${shop.addShop}
     ${shop.editShop}
     ${shop.deleteShop}
-    ${product.searchProducts}
 }
 
 schema {

@@ -18,6 +18,11 @@ class ProductService {
     return products.map(({ dataValues: product }) => product);
   }
 
+  static async getAllProductsAccordingCategory(categoryId) {
+    const products = await database.Product.findAll({ where: { category_id: categoryId } });
+    return products.map(({ dataValues: product }) => product);
+  }
+
   static async addNewProduct(product) {
     return database.Product.create(product);
   }
