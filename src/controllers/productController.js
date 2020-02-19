@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 import ProductService from '../services/productServices';
 import Helper from '../helpers/helper';
@@ -8,7 +9,7 @@ const { isAuth } = Helper;
 
 const {
   getProducts, addNewProduct, editProductService, deleteProductService,
-  getAllProductsAccordingCategory
+  getAllProductsAccordingCategory, getLike, removeLike, getAllLikes, addLike,
 } = ProductService;
 const { checkIfIsYourShop } = ShopService;
 const { validateProduct } = productValidation;
@@ -28,6 +29,7 @@ class ProductController {
         image2: String!,
         image3: String!,
         price: Int!,
+        likes: Int,
         category_id: Int!
         createdAt: String!
         updatedAt: String!
@@ -75,6 +77,10 @@ class ProductController {
       shop_id: Int!,
       product_id: Int
     ): ${helper.successMessageSchemaName}`;
+
+    this.likeProduct = `likeProduct(
+      product_id: Int!
+    ): ${this.schemaName}`;
   }
 
   static async getProducts(args, req) {
@@ -84,12 +90,33 @@ class ProductController {
     const isYourShop = await checkIfIsYourShop(args.shop_id, req.user.id);
     if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
 
-
     const products = await getProducts(args.shop_id, args.product_id);
     if (!products) throw new Error(`You do not have a product with id ${args.product_id} under your shop of id ${args.shop_id}`);
 
     if (products.length < 1) return [];
     return products;
+  }
+
+  static async likeProduct(args, req) {
+    isAuth(req.user);
+
+    const like = await getLike(req.user.id, args.product_id);
+    if (like) {
+      const product = await removeLike(req.user.id, args.product_id);
+      console.log('the product on remove is : ', product.dataValues);
+
+      return ProductController.attachLikes(product);
+    }
+
+    // if you didn't like the product, then add your like to the product
+    const product = await addLike({ user_id: req.user.id, product_id: args.product_id });
+    return ProductController.attachLikes(product);
+  }
+
+  static async attachLikes(product) {
+    const numberOfLikes = await getAllLikes(product.id);
+    product.likes = numberOfLikes;
+    return product;
   }
 
   static async searchProducts(args, req) {

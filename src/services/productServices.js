@@ -23,6 +23,38 @@ class ProductService {
     return products.map(({ dataValues: product }) => product);
   }
 
+  static async getLike(userId, productId) {
+    // get only one product of a given shop
+    const product = await database.Like.findOne({ where: { user_id: userId, product_id: productId } });
+    if (!product) return null;
+    return product.dataValues;
+  }
+
+  static async getAllLikes(productId) {
+    // get only one product of a given shop
+    const product = await database.Like.findAll({ where: { product_id: productId } });
+    if (!product) return 0;
+    return product.length;
+  }
+
+  static async removeLike(userId, productId) {
+    await database.Like.destroy({
+      where: {
+        [Op.and]: [
+          { user_id: userId },
+          { product_id: productId }],
+      },
+    });
+
+    return database.Product.findOne({ where: { id: productId } });
+  }
+
+  static async addLike(like) {
+    await database.Like.create(like);
+
+    return database.Product.findOne({ where: { id: like.product_id } });
+  }
+
   static async addNewProduct(product) {
     return database.Product.create(product);
   }
@@ -40,8 +72,6 @@ class ProductService {
   }
 
   static async deleteProductService(product) {
-    // database.Request.destroy({ where: { id } });
-
     return database.Product.destroy({
       where: {
         [Op.and]: [
