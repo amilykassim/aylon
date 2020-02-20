@@ -59,6 +59,11 @@ export function up(queryInterface, Sequelize) {
         as: 'country_id',
       },
     },
+    is_verified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

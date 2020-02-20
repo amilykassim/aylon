@@ -48,6 +48,8 @@ type RootMutation {
     ${shop.followShop}
     ${user.editPersonalSettings}
     ${report.addReport}
+    ${auth.resetPassword}
+    ${auth.sendResetPasswordCode}
 }
 
 schema {

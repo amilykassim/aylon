@@ -10,6 +10,7 @@ export default (sequelize, DataTypes) => {
     gender: DataTypes.STRING,
     country_id: DataTypes.INTEGER,
     role_value: DataTypes.INTEGER,
+    is_verified: DataTypes.BOOLEAN,
   }, {});
   // eslint-disable-next-line no-unused-vars
   User.associate = (models) => {

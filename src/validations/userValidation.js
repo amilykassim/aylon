@@ -11,7 +11,7 @@ class Validations {
       username: Joi.string().required().min(3).max(255),
       password: Joi.string().required().min(6).max(255),
       phone_number: Joi.string().required().min(3).max(20),
-      role_id: Joi.number().required().min(1),
+      role_value: Joi.number().required().min(1),
       country_id: Joi.number().required().min(1),
     };
 

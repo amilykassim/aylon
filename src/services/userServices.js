@@ -45,6 +45,12 @@ class UserService {
     return user.dataValues;
   }
 
+  static async findUserByPhoneNumber(phoneNumber) {
+    const user = await database.User.findOne({ where: { phone_number: phoneNumber } });
+    if (!user) return null;
+    return user.dataValues;
+  }
+
   static async findUserById(id) {
     const user = await database.User.findOne({ where: { id } });
     if (!user) return null;
@@ -109,6 +115,20 @@ class UserService {
     // update the logged in user's password
     await database.User.update(searchUser, { where: { id: user.id } });
     return database.User.findOne({ where: { id: user.id } });
+  }
+
+  static async resetPassword(data) {
+    const searchUser = await UserService.findUserByPhoneNumber(data.phone_number);
+
+    // hash the new password before saving it.
+    if (data.new_password) {
+      const hashedPassword = await UserService.hashPassword(data.new_password);
+      searchUser.password = hashedPassword;
+    }
+
+    // update the logged in user's password
+    await database.User.update(searchUser, { where: { id: searchUser.id } });
+    return database.User.findOne({ where: { id: searchUser.id } });
   }
 }
 

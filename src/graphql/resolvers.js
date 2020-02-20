@@ -4,7 +4,9 @@ import ProductController from '../controllers/productController';
 import ShopController from '../controllers/shopController';
 import ReportController from '../controllers/reportController';
 
-const { signup, login } = AuthController;
+const {
+  signup, login, sendResetPasswordCode, resetPassword,
+} = AuthController;
 const {
   getUsers, getMyProfile, editProfile, changePassword, assignRole,
   editPersonalSettings,
@@ -43,6 +45,8 @@ const rootResolver = {
   searchShops,
   editPersonalSettings,
   addReport,
+  sendResetPasswordCode,
+  resetPassword,
 };
 
 export default rootResolver;
