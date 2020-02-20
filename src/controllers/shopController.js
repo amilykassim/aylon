@@ -32,8 +32,7 @@ class ShopController {
       }`;
 
     this.getShops = `getShops(
-       shop_id: Int,
-       name: String
+       shop_id: Int
     ): [${this.schemaName}]`;
 
     this.addShop = `addShop(
@@ -60,34 +59,42 @@ class ShopController {
     this.followShop = `followShop(
       shop_id: Int!
     ): ${this.schemaName}`;
+
+    this.shopFilterInputSchemaName = 'ShopFilterInput';
+    this.shopFilterInputSchema = `input ${this.shopFilterInputSchemaName} {
+      name: String
+    }`;
+
+    this.searchShops = `searchShops(filter: ${this.shopFilterInputSchemaName}): [${this.schemaName}]`;
   }
 
   static async getShops(args, req) {
     isAuth(req.user);
 
-    // if there is username, then it is a search
-    if (args.name) {
-      const shops = await getAllShops();
-      // get all shop/s name that matches the name passed
-      const exactMatch = shops.filter((shop) => trimSpaces(shop.name) === trimSpaces(args.name));
-      // get all products name that starts with the name passed
-      const startWithMatch = shops.filter((shop) => trimSpaces(shop.name).startsWith(trimSpaces(args.name)));
-      // get all shop/s name contains the name passed
-      const containsMatch = shops.filter((shop) => trimSpaces(shop.name).includes(trimSpaces(args.name)));
-      const foundShop = [...exactMatch, ...startWithMatch, ...containsMatch];
-      // remove duplicates
-      const uniquefoundShop = Array.from(new Set(foundShop));
-
-      if (uniquefoundShop.length === 0) throw new Error('Sorry, we did not find any results related to your search');
-      return uniquefoundShop;
-    }
-
-    // otherwise get a shop with this id
+    // get a shop with this id
     const shops = await getShopsService(args.shop_id);
     if (!shops) throw new Error(`shop with id ${args.shop_id} does not exist`);
 
     if (shops.length < 1) return [];
     return ShopController.attachFollowers(shops);
+  }
+
+  static async searchShops(args, req) {
+    isAuth(req.user);
+
+    const shops = await getAllShops();
+    // get all shop/s name that matches the name passed
+    const exactMatch = shops.filter((shop) => trimSpaces(shop.name) === trimSpaces(args.filter.name));
+    // get all products name that starts with the name passed
+    const startWithMatch = shops.filter((shop) => trimSpaces(shop.name).startsWith(trimSpaces(args.filter.name)));
+    // get all shop/s name contains the name passed
+    const containsMatch = shops.filter((shop) => trimSpaces(shop.name).includes(trimSpaces(args.filter.name)));
+    const foundShop = [...exactMatch, ...startWithMatch, ...containsMatch];
+    // remove duplicates
+    const uniquefoundShop = Array.from(new Set(foundShop));
+
+    if (uniquefoundShop.length === 0) throw new Error('Sorry, we did not find any results related to your search');
+    return uniquefoundShop;
   }
 
   static async followShop(args, req) {
