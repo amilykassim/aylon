@@ -26,6 +26,38 @@ class ShopService {
     return shops;
   }
 
+  static async getFollow(userId, shopId) {
+    // get your follow on this shop
+    const myFollow = await database.Follower.findOne({ where: { user_id: userId, shop_id: shopId } });
+    if (!myFollow) return null;
+    return myFollow.dataValues;
+  }
+
+  static async getAllFollowers(shopId) {
+    // get all followers of a given shop
+    const followers = await database.Follower.findAll({ where: { shop_id: shopId } });
+    if (!followers) return 0;
+    return followers.length;
+  }
+
+  static async removeFollow(userId, shopId) {
+    await database.Follower.destroy({
+      where: {
+        [Op.and]: [
+          { user_id: userId },
+          { shop_id: shopId }],
+      },
+    });
+
+    return database.Shop.findOne({ where: { id: shopId } });
+  }
+
+  static async addFollow(follow) {
+    await database.Follower.create(follow);
+
+    return database.Shop.findOne({ where: { id: follow.shop_id } });
+  }
+
   static async checkIfIsYourShop(shopId, userId) {
     const shop = await database.Shop.findOne({ where: { id: shopId, user_id: userId } });
 

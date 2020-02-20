@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 import Helper from '../helpers/helper';
 import shopValidation from '../validations/shopValidation';
@@ -7,7 +8,7 @@ const { isAuth, trimSpaces } = Helper;
 
 const {
   getShopsService, addNewShopService, editShopService, deleteShopService,
-  getAllShops,
+  getAllShops, addFollow, removeFollow, getAllFollowers, getFollow,
 } = ShopService;
 const { validateShop } = shopValidation;
 const helper = new Helper();
@@ -25,6 +26,7 @@ class ShopController {
         country_id: Int!,
         active: Boolean!
         is_verified: Boolean!
+        followers: Int
         createdAt: String!
         updatedAt: String!
       }`;
@@ -54,6 +56,10 @@ class ShopController {
     this.deleteShop = `deleteShop(
       shop_id: Int!,
     ): ${helper.successMessageSchemaName}`;
+
+    this.followShop = `followShop(
+      shop_id: Int!
+    ): ${this.schemaName}`;
   }
 
   static async getShops(args, req) {
@@ -82,6 +88,26 @@ class ShopController {
 
     if (shops.length < 1) return [];
     return shops;
+  }
+
+  static async followShop(args, req) {
+    isAuth(req.user);
+
+    const follow = await getFollow(req.user.id, args.shop_id);
+    if (follow) {
+      const shop = await removeFollow(req.user.id, args.shop_id);
+      return ShopController.attachFollowers(shop);
+    }
+
+    // if you didn't follow the shop, then add your follow to the shop
+    const shop = await addFollow({ user_id: req.user.id, shop_id: args.shop_id });
+    return ShopController.attachFollowers(shop);
+  }
+
+  static async attachFollowers(shop) {
+    const numberOfFollowers = await getAllFollowers(shop.id);
+    shop.followers = numberOfFollowers;
+    return shop;
   }
 
   static async addShop(args, req) {

@@ -10,11 +10,11 @@ const {
 
 const {
   getProducts, addProduct, editProduct, deleteProduct, searchProducts,
-  likeProduct
+  likeProduct,
 } = ProductController;
 
 const {
-  getShops, addShop, editShop, deleteShop,
+  getShops, addShop, editShop, deleteShop, followShop,
 } = ShopController;
 
 const rootResolver = {
@@ -35,6 +35,7 @@ const rootResolver = {
   addShop,
   editShop,
   deleteShop,
+  followShop,
 };
 
 export default rootResolver;

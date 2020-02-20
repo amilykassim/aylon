@@ -40,6 +40,7 @@ type RootMutation {
     ${shop.addShop}
     ${shop.editShop}
     ${shop.deleteShop}
+    ${shop.followShop}
 }
 
 schema {

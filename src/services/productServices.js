@@ -24,17 +24,17 @@ class ProductService {
   }
 
   static async getLike(userId, productId) {
-    // get only one product of a given shop
-    const product = await database.Like.findOne({ where: { user_id: userId, product_id: productId } });
-    if (!product) return null;
-    return product.dataValues;
+    // get your like on this product
+    const myLike = await database.Like.findOne({ where: { user_id: userId, product_id: productId } });
+    if (!myLike) return null;
+    return myLike.dataValues;
   }
 
   static async getAllLikes(productId) {
-    // get only one product of a given shop
-    const product = await database.Like.findAll({ where: { product_id: productId } });
-    if (!product) return 0;
-    return product.length;
+    // get all of the likes of this shop
+    const likes = await database.Like.findAll({ where: { product_id: productId } });
+    if (!likes) return 0;
+    return likes.length;
   }
 
   static async removeLike(userId, productId) {
