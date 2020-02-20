@@ -3,6 +3,7 @@ import AuthController from '../controllers/authController';
 import ProductController from '../controllers/productController';
 import Helper from '../helpers/helper';
 import ShopController from '../controllers/shopController';
+import ReportController from '../controllers/reportController';
 
 const { buildSchema } = require('graphql');
 
@@ -10,6 +11,7 @@ const user = new UserController();
 const auth = new AuthController();
 const product = new ProductController();
 const shop = new ShopController();
+const report = new ReportController();
 const helper = new Helper();
 
 module.exports = buildSchema(`
@@ -45,6 +47,7 @@ type RootMutation {
     ${shop.deleteShop}
     ${shop.followShop}
     ${user.editPersonalSettings}
+    ${report.addReport}
 }
 
 schema {

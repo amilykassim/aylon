@@ -16,6 +16,9 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Shop, {
       foreignKey: 'user_id',
     });
+    User.hasMany(models.Report, {
+      foreignKey: 'user_id',
+    });
     User.belongsTo(models.Role, {
       foreignKey: 'role_value',
     });

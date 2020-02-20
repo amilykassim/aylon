@@ -2,6 +2,7 @@ import AuthController from '../controllers/authController';
 import UserController from '../controllers/userController';
 import ProductController from '../controllers/productController';
 import ShopController from '../controllers/shopController';
+import ReportController from '../controllers/reportController';
 
 const { signup, login } = AuthController;
 const {
@@ -17,6 +18,8 @@ const {
 const {
   getShops, addShop, editShop, deleteShop, followShop, searchShops,
 } = ShopController;
+
+const { addReport } = ReportController;
 
 const rootResolver = {
   signup,
@@ -39,6 +42,7 @@ const rootResolver = {
   followShop,
   searchShops,
   editPersonalSettings,
+  addReport,
 };
 
 export default rootResolver;
