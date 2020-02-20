@@ -4,7 +4,8 @@ import Helper from '../helpers/helper';
 const helper = new Helper();
 const { isAuth } = Helper;
 const {
-  getUsersService, getMyProfileData, updateProfile, changePassword, updateRole
+  getUsersService, getMyProfileData, updateProfile, changePassword, updateRole,
+  updatePersonalSettings,
 } = UserService;
 
 
@@ -28,6 +29,17 @@ class UserController {
         updatedAt: String!
       }`;
 
+    this.settingSchemaName = 'PersonalSetting';
+    this.settingSchema = `
+        type ${this.settingSchemaName} {
+        id: ID!
+        email_notification: Boolean,
+        push_notification: Boolean,
+        auto_fill: Boolean,
+        createdAt: String!
+        updatedAt: String!
+      }`;
+
     this.getUsers = `getUsers(userId: Int): [${this.schemaName}]`;
     this.getMyProfile = `getMyProfile: ${this.schemaName}`;
 
@@ -41,6 +53,12 @@ class UserController {
         gender: String,
         active: Boolean,
     ): ${this.schemaName}`;
+
+    this.editPersonalSettings = `editPersonalSettings(
+        email_notification: Boolean,
+        push_notification: Boolean,
+        auto_fill: Boolean,
+    ): ${this.settingSchemaName}`;
 
     this.changePassword = `changePassword(
       currentPassword: String!,
@@ -72,6 +90,12 @@ class UserController {
     if (user.length > 0) throw new Error('Username already exits');
 
     return user;
+  }
+
+  static async editPersonalSettings(args, req) {
+    isAuth(req.user);
+
+    return updatePersonalSettings(args, req.user.id);
   }
 
   static async changePassword(args, req) {

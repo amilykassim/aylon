@@ -19,6 +19,7 @@ ${shop.schema}
 ${helper.successMessageSchema}
 ${product.productFilterInputSchema}
 ${shop.shopFilterInputSchema}
+${user.settingSchema}
 
 type RootQuery {
     ${user.getUsers}
@@ -43,6 +44,7 @@ type RootMutation {
     ${shop.editShop}
     ${shop.deleteShop}
     ${shop.followShop}
+    ${user.editPersonalSettings}
 }
 
 schema {

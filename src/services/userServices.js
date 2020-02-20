@@ -82,6 +82,12 @@ class UserService {
     return database.User.findOne({ where: { id: loggedInUserId } });
   }
 
+  static async updatePersonalSettings(personalSettings, loggedInUserId) {
+    // update the logged in user's personal settings
+    await database.Preference.update(personalSettings, { where: { user_id: loggedInUserId } });
+    return database.Preference.findOne({ where: { user_id: loggedInUserId } });
+  }
+
   static async updateRole(data, userId) {
     await database.User.update(data, { where: { id: userId } });
     return database.User.findOne({ where: { id: userId } });
