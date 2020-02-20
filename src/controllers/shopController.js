@@ -8,7 +8,7 @@ const { isAuth, trimSpaces } = Helper;
 
 const {
   getShopsService, addNewShopService, editShopService, deleteShopService,
-  getAllShops, addFollow, removeFollow, getAllFollowers, getFollow,
+  getAllShops, addFollow, removeFollow, getAllFollowers, getFollow, verifyShopService,
 } = ShopService;
 const { validateShop } = shopValidation;
 const helper = new Helper();
@@ -72,11 +72,23 @@ class ShopController {
     isAuth(req.user);
 
     // get a shop with this id
-    const shops = await getShopsService(args.shop_id);
+    let shops = await getShopsService(args.shop_id);
     if (!shops) throw new Error(`shop with id ${args.shop_id} does not exist`);
 
     if (shops.length < 1) return [];
-    return ShopController.attachFollowers(shops);
+    shops = await ShopController.attachFollowers(shops);
+    return shops.map(async (singleShop) => ShopController.verifyShop(singleShop));
+  }
+
+  static async verifyShop(shopPassed) {
+    const shop = await shopPassed;
+
+    if (!shop.is_verified && shop.followers >= 1000) {
+      shop.is_verified = true;
+      await verifyShopService(shop);
+      return shop;
+    }
+    return shop;
   }
 
   static async searchShops(args, req) {

@@ -18,6 +18,10 @@ class ShopService {
     return shops.map(({ dataValues: shop }) => shop);
   }
 
+  static async verifyShopService(shop) {
+    return database.Shop.update(shop, { where: { id: shop.id } });
+  }
+
   static async getAllShops() {
     let shops = await database.Shop.findAll();
     shops = shops.map(({ dataValues: shop }) => shop);
