@@ -86,15 +86,11 @@ class ProductController {
   static async getProducts(args, req) {
     isAuth(req.user);
 
-    // check if it is your shop
-    const isYourShop = await checkIfIsYourShop(args.shop_id, req.user.id);
-    if (!isYourShop) throw new Error(`You are not the owner of the shop with id ${args.shop_id}`);
-
     const products = await getProducts(args.shop_id, args.product_id);
-    if (!products) throw new Error(`You do not have a product with id ${args.product_id} under your shop of id ${args.shop_id}`);
+    if (!products) throw new Error(`There is no product with id ${args.product_id} under the shop of id ${args.shop_id}`);
 
     if (products.length < 1) return [];
-    return products;
+    return ProductController.attachLikes(products);
   }
 
   static async likeProduct(args, req) {
@@ -112,6 +108,17 @@ class ProductController {
   }
 
   static async attachLikes(product) {
+    // if you're viewing products, then attach it's likes
+    let productsWithLikes = null;
+    if (Array.isArray(product)) {
+      productsWithLikes = product.map(async (singleProduct) => {
+        const numberOfLikes = await getAllLikes(singleProduct.id);
+        singleProduct.likes = numberOfLikes;
+        return singleProduct;
+      });
+      return productsWithLikes;
+    }
+
     const numberOfLikes = await getAllLikes(product.id);
     product.likes = numberOfLikes;
     return product;

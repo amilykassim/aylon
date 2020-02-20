@@ -82,12 +82,12 @@ class ShopController {
       return uniquefoundShop;
     }
 
-    // otherwise get a shop according to it's id
-    const shops = await getShopsService(args.shop_id, req.user.id);
-    if (!shops) throw new Error(`You don't have a shop with id ${args.shop_id}`);
+    // otherwise get a shop with this id
+    const shops = await getShopsService(args.shop_id);
+    if (!shops) throw new Error(`shop with id ${args.shop_id} does not exist`);
 
     if (shops.length < 1) return [];
-    return shops;
+    return ShopController.attachFollowers(shops);
   }
 
   static async followShop(args, req) {
@@ -105,6 +105,18 @@ class ShopController {
   }
 
   static async attachFollowers(shop) {
+    // if you're viewing shops, then attach it's followers
+    let shopsWiFollowers = null;
+    if (Array.isArray(shop)) {
+      shopsWiFollowers = shop.map(async (singleShop) => {
+        const numberOfFollowers = await getAllFollowers(singleShop.id);
+        singleShop.followers = numberOfFollowers;
+        return singleShop;
+      });
+      return shopsWiFollowers;
+    }
+
+    // if you're following or unfollowing a shop, then attach remaining followers too.
     const numberOfFollowers = await getAllFollowers(shop.id);
     shop.followers = numberOfFollowers;
     return shop;

@@ -5,16 +5,16 @@ import database from '../database/models';
 const { Op } = Sequelize;
 
 class ShopService {
-  static async getShopsService(shopId, userId) {
-    // get only one shop of a given user
+  static async getShopsService(shopId) {
+    // get only one shop
     if (shopId) {
-      const shop = await database.Shop.findOne({ where: { id: shopId, user_id: userId } });
+      const shop = await database.Shop.findOne({ where: { id: shopId } });
       if (!shop) return null;
       return [shop.dataValues];
     }
 
-    // get all of the shops of a given user
-    const shops = await database.Shop.findAll({ where: { user_id: userId } });
+    // get all of the shops
+    const shops = await database.Shop.findAll();
     return shops.map(({ dataValues: shop }) => shop);
   }
 
