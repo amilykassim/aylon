@@ -3,6 +3,7 @@ import UserController from '../controllers/userController';
 import ProductController from '../controllers/productController';
 import ShopController from '../controllers/shopController';
 import ReportController from '../controllers/reportController';
+import FeedController from '../controllers/feedController';
 
 const {
   signup, login, sendResetPasswordCode, resetPassword,
@@ -22,6 +23,7 @@ const {
 } = ShopController;
 
 const { addReport } = ReportController;
+const { addFeed } = FeedController;
 
 const rootResolver = {
   signup,
@@ -47,6 +49,7 @@ const rootResolver = {
   addReport,
   sendResetPasswordCode,
   resetPassword,
+  addFeed,
 };
 
 export default rootResolver;

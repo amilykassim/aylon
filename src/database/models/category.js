@@ -7,6 +7,9 @@ export default (sequelize, DataTypes) => {
     Category.hasMany(models.Product, {
       foreignKey: 'category_id',
     });
+    Category.hasMany(models.Feed, {
+      foreignKey: 'category_id',
+    });
   };
   return Category;
 };
