@@ -31,5 +31,5 @@ This software is published by `Aylon Inc` under the [MIT licence](http://opensou
 
 #### Contributors
 
-[Amily Kassim](https://github.com/amilykassim) || [Jonathan Shyaka](https://github.com/drayzii)
+[Amily Kassim](https://github.com/amilykassim)
 

@@ -4,6 +4,7 @@ import ProductController from '../controllers/productController';
 import ShopController from '../controllers/shopController';
 import ReportController from '../controllers/reportController';
 import FeedController from '../controllers/feedController';
+import CategoryController from '../controllers/categoryController';
 
 const {
   signup, login, sendResetPasswordCode, resetPassword,
@@ -24,6 +25,9 @@ const {
 
 const { addReport } = ReportController;
 const { addFeed } = FeedController;
+const {
+  addCategory, getCategory, editCategory, deleteCategory,
+} = CategoryController;
 
 const rootResolver = {
   signup,
@@ -50,6 +54,10 @@ const rootResolver = {
   sendResetPasswordCode,
   resetPassword,
   addFeed,
+  addCategory,
+  getCategory,
+  editCategory,
+  deleteCategory,
 };
 
 export default rootResolver;

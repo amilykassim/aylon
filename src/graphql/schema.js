@@ -5,6 +5,7 @@ import Helper from '../helpers/helper';
 import ShopController from '../controllers/shopController';
 import ReportController from '../controllers/reportController';
 import FeedController from '../controllers/feedController';
+import CategoryController from '../controllers/categoryController';
 
 const { buildSchema } = require('graphql');
 
@@ -14,11 +15,13 @@ const product = new ProductController();
 const shop = new ShopController();
 const report = new ReportController();
 const feed = new FeedController();
+const category = new CategoryController();
 const helper = new Helper();
 
 module.exports = buildSchema(`
 ${user.schema}
 ${product.schema}
+${category.schema}
 ${shop.schema}
 ${helper.successMessageSchema}
 ${product.productFilterInputSchema}
@@ -53,6 +56,10 @@ type RootMutation {
     ${auth.resetPassword}
     ${auth.sendResetPasswordCode}
     ${feed.addFeed}
+    ${category.addCategory}
+    ${category.getCategory}
+    ${category.editCategory}
+    ${category.deleteCategory}
 }
 
 schema {
