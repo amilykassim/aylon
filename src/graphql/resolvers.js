@@ -38,7 +38,7 @@ const rootResolver = {
   changePassword,
   assignRole,
   getProducts,
-  searchProducts,
+  searchProducts,auth
   addProduct,
   editProduct,
   deleteProduct,
