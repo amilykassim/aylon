@@ -1,7 +1,7 @@
 // Define variables.
 // TODO: Customise these values. Must match the values in the deployment.yaml file.
 def app_name = "bulk-sms"
-def environment = "prod"
+def environment = "dev"
 def major_version = "1"
 def minor_version = "68"
 def namespace = "services"

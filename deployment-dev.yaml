@@ -2,13 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    env: prod  # TODO: Replace environment. [prod / env]
+    env: dev  # TODO: Replace environment. [prod / env]
     version: v1  # TODO: Replace major version
     app: bulk-sms # TODO: Replace app name 
     project: bulk-sms  # TODO: Replace project name 
-    revision: prod_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
+    revision: dev_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
     service: bulk-sms # TODO: Replace app name 
-  name: bulk-sms-service-prod # TODO: Replace app name  and environment
+  name: bulk-sms-service-dev # TODO: Replace app name  and environment
   namespace: services #  TODO: Replace namespace. See doc for options.  
 spec:
   type: ClusterIP
@@ -18,7 +18,7 @@ spec:
     targetPort: 8185  # TODO: customise port
     protocol: TCP
   selector:
-    env: prod  # TODO: Replace environment. [prod / env]
+    env: dev  # TODO: Replace environment. [prod / env]
     version: v1  # TODO: Replace major version
     app: bulk-sms # TODO: Replace app name 
 ---
@@ -28,7 +28,7 @@ metadata:
   name: bulk-sms-account # TODO: Replace app name
   namespace: services #  TODO: Replace namespace. See doc for options.  
   labels:
-    env: prod  # TODO: Replace environment. [prod / env]
+    env: dev  # TODO: Replace environment. [prod / env]
     version: v1  # TODO: Replace major version
     account: bulk-sms # TODO: Replace app name 
     project: bulk-sms  # TODO: Replace project name
@@ -37,34 +37,34 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   labels:
-    env: prod  # TODO: Replace environment. [prod / env]
+    env: dev  # TODO: Replace environment. [prod / env]
     version: v1 # TODO: Replace major version
     app: bulk-sms # TODO: Replace app name 
     project: bulk-sms # TODO: Replace project name 
-    revision: prod_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
+    revision: dev_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
     deployment: bulk-sms # TODO: Replace app name 
-  name: bulk-sms-deployment-prod # TODO: Replace app name  and environment
+  name: bulk-sms-deployment-dev # TODO: Replace app name  and environment
   namespace: services #  TODO: Replace namespace. See doc for options. 
 spec:
   replicas: 1  # TODO: Replace number of replicas
   selector:
     matchLabels:
-      env: prod  # TODO: Replace environment. [prod / env]
+      env: dev  # TODO: Replace environment. [prod / env]
       version: v1  # TODO: Replace major version
       app: bulk-sms # TODO: Replace app name 
   template:
     metadata:
       labels:
-        env: prod  # TODO: Replace environment. [prod / env]
+        env: dev  # TODO: Replace environment. [prod / env]
         version: v1  # TODO: Replace major version
         app: bulk-sms # TODO: Replace app name 
-        revision: prod_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
+        revision: dev_v1.68 # TODO: Replace environment. [prod / env], major and minor version 
     spec:
       serviceAccountName: bulk-sms-account  # TODO: Replace app name
       imagePullSecrets:
       - name: us-east-1-ecr-registry
       containers:  
-      - image: 126480227765.dkr.ecr.us-east-1.amazonaws.com/bulk-sms:prod_v1.68  # TODO: Replace app name, environment, major and minor version.
+      - image: 126480227765.dkr.ecr.us-east-1.amazonaws.com/bulk-sms:dev_v1.68  # TODO: Replace app name, environment, major and minor version.
         name: bulk-sms-container  # TODO: Replace app name.
         ports:
         - containerPort: 8185 # TODO: replace with container port
@@ -79,9 +79,9 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   namespace: services #  TODO: Replace namespace. See doc for options.
-  name: bulk-sms-virtual-service-prod # TODO: Replace app name  and environment
+  name: bulk-sms-virtual-service-dev # TODO: Replace app name  and environment
   labels:
-    env: prod  # TODO: Replace environment. [prod / env]  
+    env: dev  # TODO: Replace environment. [prod / env]  
     version: v1  # TODO: Replace major version  
     app: bulk-sms # TODO: Replace app name
     virtualservice: bulk-sms  # TODO: Replace app name
@@ -98,6 +98,6 @@ spec:
         prefix: / 
     route:
     - destination:
-        host: "bulk-sms-service-prod.services.svc.cluster.local"  # TODO: replace service name, env and namespace
+        host: "bulk-sms-service-dev.services.svc.cluster.local"  # TODO: replace service name, env and namespace
         port:
           number: 8185 # TODO: replace with container port
