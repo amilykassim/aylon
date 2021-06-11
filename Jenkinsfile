@@ -1,11 +1,11 @@
 // Define variables.
 // TODO: Customise these values. Must match the values in the deployment.yaml file.
-def app_name = "bulk-sms"
+def app_name = "sms-api"
 def environment = "prod"
 def major_version = "1"
-def minor_version = "68"
+def minor_version = "1"
 def namespace = "services"
-def cluster_context = "mtn-cluster"
+def cluster_context = "irembo-cluster"
 
 pipeline {
     agent any
